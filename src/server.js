@@ -1,5 +1,4 @@
 import express from "express"
-import bodyParser from "body-parser"
 import cors from "cors"
 import morgan from "morgan"
 import movies from "../src/api/movies.route"
@@ -9,8 +8,8 @@ const app = express()
 
 app.use(cors())
 process.env.NODE_ENV !== "prod" && app.use(morgan("dev"))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // Register api routes
 app.use("/api/v1/movies", movies)

@@ -1,26 +1,16 @@
 import { MongoClient } from "mongodb"
 
 describe("MongoClient", () => {
-  /**
-   * In this lesson, we'll use the MongoClient object to initiate a connection
-   * with the database.
-   */
 
   test("Client initialized with URI", async () => {
-    /**
-     * Here's a MongoClient object initialized with a URI string. The only
-     * option we've passed is to use the new url parser in order to be
-     * future compatible, so this client will have the default connection
-     * parameters.
-     */
 
     let testClient
     try {
       testClient = await MongoClient.connect(process.env.MFLIX_DB_URI, {
         useNewUrlParser: true,
+        useUnifiedTopology: true
       })
       expect(testClient).not.toBeNull()
-
       // retrieve client options
       const clientOptions = testClient.s.options
       // console.error("OPTS", clientOptions)
@@ -52,15 +42,15 @@ describe("MongoClient", () => {
     let testClient
     try {
       testClient = await MongoClient.connect(process.env.MFLIX_DB_URI, {
-        connectTimeoutMS: 200,
+        connectTimeoutMS: 1000,
         retryWrites: true,
         useNewUrlParser: true,
+        useUnifiedTopology: true
       })
-
       const clientOptions = testClient.s.options
 
       // expect clientOptions to have the correct settings
-      expect(clientOptions.connectTimeoutMS).toBe(200)
+      expect(clientOptions.connectTimeoutMS).toBe(1000)
       expect(clientOptions.retryWrites).toBe(true)
       expect(clientOptions.useNewUrlParser).toBe(true)
     } catch (e) {
@@ -84,6 +74,7 @@ describe("MongoClient", () => {
     try {
       testClient = await MongoClient.connect(process.env.MFLIX_DB_URI, {
         useNewUrlParser: true,
+        useUnifiedTopology: true
       })
 
       // create a database object for the "mflix" database
@@ -119,9 +110,10 @@ describe("MongoClient", () => {
     let testClient
     try {
       testClient = await MongoClient.connect(process.env.MFLIX_DB_URI, {
-        connectTimeoutMS: 200,
+        connectTimeoutMS: 1000,
         retryWrites: true,
         useNewUrlParser: true,
+        useUnifiedTopology: true
       })
 
       // create a database object for the "mflix" database
