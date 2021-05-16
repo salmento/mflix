@@ -156,22 +156,13 @@ export default class MoviesDAO {
       },
     }
 
-    /**
-    Ticket: Faceted Search
-
-    Please append the skipStage, limitStage, and facetStage to the queryPipeline
-    (in that order). You can accomplish this by adding the stages directly to
-    the queryPipeline.
-
-    The queryPipeline is a Javascript array, so you can use push() or concat()
-    to complete this task, but you might have to do something about `const`.
-    */
-
     const queryPipeline = [
       matchStage,
       sortStage,
-      // TODO Ticket: Faceted Search
-      // Add the stages to queryPipeline in the correct order.
+      skipStage,
+      limitStage,
+      facetStage
+
     ]
 
     try {
@@ -219,7 +210,7 @@ export default class MoviesDAO {
         .find(query)
         .project(project)
         .sort(sort)
-        .skip(moviesPerPage*page)
+        .skip(moviesPerPage * page)
     } catch (e) {
       console.error(`Unable to issue find command, ${e}`)
       return { moviesList: [], totalNumMovies: 0 }
@@ -258,38 +249,46 @@ export default class MoviesDAO {
    */
   static async getMovieByID(id) {
     try {
-      /**
-      Ticket: Get Comments
-
-      Given a movie ID, build an Aggregation Pipeline to retrieve the comments
-      matching that movie's ID.
-
-      The $match stage is already completed. You will need to add a $lookup
-      stage that searches the `comments` collection for the correct comments.
-      */
-
-      // TODO Ticket: Get Comments
-      // Implement the required pipeline.
       const pipeline = [
         {
           $match: {
-            _id: ObjectId(id)
-          }
-        }
+            _id: new ObjectId(id),
+          },
+        },
+        {
+          $lookup: {
+            from: "comments",
+            let: {
+              id: "$_id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $eq: ["$movie_id", "$$id"],
+                  },
+                },
+              },
+              {
+                $sort: {
+                  date: -1,
+                },
+              },
+            ],
+            as: "comments",
+          },
+        },
+        {
+          $addFields: {
+            comments: "$comments",
+          },
+        },
       ]
       return await movies.aggregate(pipeline).next()
     } catch (e) {
-      /**
-      Ticket: Error Handling
-
-      Handle the error that occurs when an invalid ID is passed to this method.
-      When this specific error is thrown, the method should return `null`.
-      */
-
-      // TODO Ticket: Error Handling
-      // Catch the InvalidId error by string matching, and then handle it.
+     
       console.error(`Something went wrong in getMovieByID: ${e}`)
-      throw e
+      return null;
     }
   }
 }
