@@ -6,7 +6,8 @@ describe("Timeouts", () => {
   })
 
   test("Timeout is set to 2500 milliseconds", async () => {
-    const { wtimeout } = await MoviesDAO.getConfiguration()
-    expect(wtimeout).toBe(2500)
+    const response = await MoviesDAO.getConfiguration()
+    console.log(response)
+    expect(response.wtimeout).toBe(2500)
   })
 })

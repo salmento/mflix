@@ -8,9 +8,15 @@ const port = process.env.PORT || 8000
 
 MongoClient.connect(
   process.env.MFLIX_DB_URI,
-  {
+  { 
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    wtimeout: 2500,
+    poolSize: 50,
+    useUnifiedTopology: true,
+    writeConcern: {
+      j: true
+    }
+
   },
 )
   .catch(err => {

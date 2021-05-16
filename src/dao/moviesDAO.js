@@ -12,6 +12,7 @@ export default class MoviesDAO {
     try {
       mflix = await conn.db(process.env.MFLIX_NS)
       movies = await conn.db(process.env.MFLIX_NS).collection("movies")
+      //this.movies = movies;
     } catch (e) {
       console.error(
         `Unable to establish a collection handle in moviesDAO: ${e}`,
@@ -287,7 +288,7 @@ export default class MoviesDAO {
       return await movies.aggregate(pipeline).next()
     } catch (e) {
      
-      console.error(`Something went wrong in getMovieByID: ${e}`)
+      console.error(`Something went wrong in getMovieByID: ${e.toString()}`)
       return null;
     }
   }

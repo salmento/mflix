@@ -23,9 +23,9 @@ export default class CommentsDAO {
    */
   static async addComment(movieId, user, comment, date) {
     try {
-      
-      const commentDoc = { 
-        movie_id: ObjectId(movieId), 
+
+      const commentDoc = {
+        movie_id: ObjectId(movieId),
         text: comment,
         name: user.name,
         email: user.email,
@@ -51,9 +51,9 @@ export default class CommentsDAO {
    */
   static async updateComment(commentId, userEmail, text, date) {
     try {
-     
+
       const updateResponse = await comments.updateOne(
-        {_id: commentId, email: userEmail},
+        { _id: commentId, email: userEmail },
         { $set: { text, date } },
       )
 
@@ -65,7 +65,7 @@ export default class CommentsDAO {
   }
 
   static async deleteComment(commentId, userEmail) {
-    
+
     try {
       const deleteResponse = await comments.deleteOne({
         _id: ObjectId(commentId),
@@ -80,26 +80,26 @@ export default class CommentsDAO {
   }
 
   static async mostActiveCommenters() {
-    /**
-    Ticket: User Report
-
-    Build a pipeline that returns the 20 most frequent commenters on the MFlix
-    site. You can do this by counting the number of occurrences of a user's
-    email in the `comments` collection.
-    */
     try {
-      // TODO Ticket: User Report
-      // Return the 20 users who have commented the most on MFlix.
-      const pipeline = []
-
-      // TODO Ticket: User Report
-      // Use a more durable Read Concern here to make sure this data is not stale.
-      const readConcern = comments.readConcern
+      const pipeline = [
+        {
+          $group: {
+            _id: '$email',
+            count: { $sum: 1 }
+          }
+        }, 
+        {
+          $sort: { count: -1 },
+        },
+        { 
+          $limit : 20
+        }
+      ]
+      const readConcern = "majaority"
 
       const aggregateResult = await comments.aggregate(pipeline, {
         readConcern,
       })
-
       return await aggregateResult.toArray()
     } catch (e) {
       console.error(`Unable to retrieve most active commenters: ${e}`)
