@@ -2,9 +2,11 @@
 Mflix
 =====
 ## URL
-https://restaurant-ruocs.mongodbstitch.com/
 -----------------
+https://restaurant-ruocs.mongodbstitch.com/
+
 ## Used tecnologies
+-----------------
 - MongoDB
 - NodeJs
 - Heroku
