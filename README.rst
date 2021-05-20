@@ -1,11 +1,11 @@
 =====
 Mflix
 =====
-## URL
+URL
 -----------------
 https://mflixmz.herokuapp.com/
 
-## Used tecnologies
+Used tecnologies
 -----------------
 - MongoDB
 - NodeJs
