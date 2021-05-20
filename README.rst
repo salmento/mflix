@@ -3,7 +3,7 @@ Mflix
 =====
 ## URL
 -----------------
-https://restaurant-ruocs.mongodbstitch.com/
+https://mflixmz.herokuapp.com/
 
 ## Used tecnologies
 -----------------
